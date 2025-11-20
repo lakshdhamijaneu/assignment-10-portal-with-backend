@@ -1,32 +1,56 @@
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Button, Box, Chip, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 const Home = () => {
+  const { user, role } = useSelector((state: RootState) => state.auth);
+
   return (
     <Container sx={{ mt: 8, textAlign: "center" }}>
-      <Typography variant="h3" gutterBottom>
-        Welcome to the Job Portal
-      </Typography>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Welcome, {user?.fullName || "User"}!
+        </Typography>
 
-      <Typography variant="h6" sx={{ mb: 4, color: "text.secondary" }}>
-        Discover top job opportunities, explore companies, and manage your next
-        career move.
-      </Typography>
+        <Chip
+          label={role === "admin" ? "Admin" : "Employee"}
+          color={role === "admin" ? "error" : "primary"}
+          sx={{ mb: 3 }}
+        />
 
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-        <Button variant="contained" size="large" component={Link} to="/jobs">
-          Browse Jobs
-        </Button>
+        <Typography variant="h6" sx={{ mb: 4, color: "text.secondary" }}>
+          Discover top job opportunities, explore companies, and manage your
+          next career move.
+        </Typography>
 
-        <Button
-          variant="outlined"
-          size="large"
-          component={Link}
-          to="/companies"
-        >
-          Explore Companies
-        </Button>
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+          <Button variant="contained" size="large" component={Link} to="/jobs">
+            Browse Jobs
+          </Button>
+
+          <Button
+            variant="outlined"
+            size="large"
+            component={Link}
+            to="/companies"
+          >
+            Explore Companies
+          </Button>
+
+          {role === "admin" && (
+            <Button
+              variant="contained"
+              size="large"
+              color="error"
+              component={Link}
+              to="/create-job"
+            >
+              Create Job
+            </Button>
+          )}
+        </Box>
+      </Paper>
     </Container>
   );
 };
