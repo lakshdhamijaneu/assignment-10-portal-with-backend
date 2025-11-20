@@ -1,146 +1,110 @@
-# Job Portal -- Assignment 9
-
-A full-stack job portal application built using **React + TypeScript +
-Vite** (frontend) and the backend APIs implemented in **Assignment 8**.
-
-This project demonstrates authentication, protected routes, API
-integration, job listings, and company showcase images --- all styled
-with **Material UI**.
-
-------------------------------------------------------------------------
+# Job Portal — Assignment 10 (Frontend)
 
 ## 🚀 Features
 
-### 🔐 **Authentication**
+### 🔐 Authentication
+- Login via:  
+  **POST /user/login**
+- User is stored in `localStorage`
+- Protected routes ensure only authenticated users can access pages
 
--   Login using:
+### 📄 Pages
+| Page              | Description |
+|------------------|-------------|
+| Home              | Welcome page with navigation |
+| Login             | Backend-powered login |
+| Job Listings      | Fetches jobs from backend |
+| Company Showcase  | Displays user/company images from backend |
+| Create Job        | Admin-only job posting page |
+| About             | Static description page |
+| Contact           | Demo contact form |
 
-        POST /user/login
+---
 
--   Uses Axios to authenticate against backend
+## 🧩 Tech Stack
 
--   Stores logged-in user in `localStorage`
+**Frontend**
+- React 18  
+- TypeScript  
+- Vite  
+- Material UI v7  
+- Axios  
+- React Router v6  
+- Redux Toolkit  
 
--   All main pages protected with `ProtectedRoute`
+**Backend (Assignment 8)**
+- Express REST API  
+- Bcrypt for authentication  
+- Multer for image uploads  
+- Static file serving (`/images/...`)
 
-### 🏠 **Pages Included**
+---
 
-  Page               Description
-  ------------------ ---------------------------------------------
-  Home               Hero section + navigation buttons
-  Login              Fully functional login with API integration
-  Job Listings       Static job list displayed using MUI cards
-  Company Showcase   Dynamic list of users fetched from backend
-  About              Summary of app features
-  Contact            Demo contact form
+## 📡 API Endpoints Used
 
-------------------------------------------------------------------------
+### 🔹 Authentication
+```
+POST /user/login
+```
 
-## 🧩 **Tech Stack**
+### 🔹 Fetch all users (Company Showcase)
+```
+GET /users
+```
 
-### Frontend
+### 🔹 Job Listings
+```
+GET /jobs
+```
 
--   React 18\
--   TypeScript\
--   Vite\
--   Material UI v7\
--   Axios\
--   React Router v6
+### 🔹 Create Job (Admin only)
+```
+POST /create/job
+```
 
-### Backend (From Assignment 8)
+---
 
--   Node.js + Express\
--   REST API routes\
--   Bcrypt authentication\
--   Multer for image upload
+## 📂 Project Structure
 
-------------------------------------------------------------------------
+```
+src/
+  api/
+    axiosClient.ts
+  components/
+    Navbar.tsx
+    ProtectedRoute.tsx
+  pages/
+    Home.tsx
+    Login.tsx
+    JobListings.tsx
+    CompanyShowcase.tsx
+    CreateJob.tsx
+    About.tsx
+    Contact.tsx
+  store/
+    authSlice.ts
+    store.ts
+  types/
+    index.ts
+```
 
-## 📡 **API Endpoints Used**
+---
 
-The frontend communicates with the backend using these routes:
+## ▶️ Running the Project
 
-### 🔹 Login
+1. Install dependencies:
+```
+npm install
+```
 
-    POST /user/login
+2. Start the dev server:
+```
+npm run dev
+```
 
-### 🔹 Fetch all users
+3. Ensure backend (Assignment 8) is running at:
+```
+http://localhost:3000
+```
 
-    GET /getUser
 
-### 🔹 User image upload
-
-    POST /user/uploadImage
-
-### 🔹 Other backend routes (create/edit/delete user)
-
-Implemented in Assignment 8 --- not used directly in this frontend.
-
-------------------------------------------------------------------------
-
-## 📂 **Project Structure**
-
-    src/
-      api/
-        axiosClient.ts
-      components/
-        Navbar.tsx
-        ProtectedRoute.tsx
-      context/
-        AuthContext.tsx
-      data/
-        jobPosts.ts
-      pages/
-        Home.tsx
-        Login.tsx
-        JobListings.tsx
-        CompanyShowcase.tsx
-        About.tsx
-        Contact.tsx
-      types/
-        index.ts
-
-------------------------------------------------------------------------
-
-## ▶️ **How to Run**
-
-### 1️⃣ Install dependencies
-
-    npm install
-
-### 2️⃣ Start Vite dev server
-
-    npm run dev
-
-### 3️⃣ Make sure backend (Assignment 8) is running on:
-
-    http://localhost:3000
-
-------------------------------------------------------------------------
-
-## 🖼️ Screenshots (Optional)
-
-You may add screenshots here before submission:
-
-    /screenshots/login.png  
-    /screenshots/home.png  
-    /screenshots/job-listings.png  
-    /screenshots/company-showcase.png
-
-------------------------------------------------------------------------
-
-## ✔️ Notes
-
--   The Job Listings are static (frontend-only), as required.\
--   The Company Showcase pulls images and user details from the
-    backend.\
--   The login is fully functional using Assignment 8 backend logic.\
--   Protected routes ensure only logged-in users can access pages.
-
-------------------------------------------------------------------------
-
-## 👨‍💻 Developed By
-
-**Laksh Dhamija**\
-Northeastern University\
-Assignment 9 -- Web Development
