@@ -20,8 +20,7 @@ const CompanyShowcase = () => {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const { data } = await axiosClient.get<UsersResponse>("/getUser");
-        console.log("data", data);
+        const { data } = await axiosClient.get<UsersResponse>("/users");
         setUsers(data.users);
       } catch (err) {
         console.error(err);
