@@ -11,6 +11,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const openapi = require("./docs/openapi");
 const { getAllUsers } = require("./controllers/user.controller");
+const jobRoutes = require("./routes/job.routes");
 
 connectDB();
 
@@ -25,6 +26,7 @@ app.use("/images", express.static(path.join(__dirname, "..", "images")));
 // Routes
 app.use("/user", userRoutes);
 app.get("/users", getAllUsers);
+app.use("/", jobRoutes);
 
 const swaggerSpec = swaggerJSDoc(openapi);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

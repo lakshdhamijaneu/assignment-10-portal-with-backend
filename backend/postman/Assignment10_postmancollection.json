@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "Assignment 8 - Users API (Final)",
+    "name": "Assignment 10 - Users & Jobs API",
     "_postman_id": "c91f6f6e-7ef1-4b18-93b1-88a6766e65da",
-    "description": "Aligned with SwaggerHub spec — Assignment 8 Secure RESTful APIs",
+    "description": "Updated Postman collection for Assignment 10 including user roles and job APIs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,11 +10,13 @@
       "name": "Create User",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
         "url": "{{base_url}}/user",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"S3cure!Pass1@\"\n}"
+          "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"S3cure!Pass1@\",\n  \"type\": \"employee\"\n}"
         }
       }
     },
@@ -22,7 +24,9 @@
       "name": "Login",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
         "url": "{{base_url}}/user/login",
         "body": {
           "mode": "raw",
@@ -34,7 +38,9 @@
       "name": "Edit User",
       "request": {
         "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
         "url": "{{base_url}}/user/edit",
         "body": {
           "mode": "raw",
@@ -46,7 +52,7 @@
       "name": "Get All Users",
       "request": {
         "method": "GET",
-        "url": "{{base_url}}/getUser"
+        "url": "{{base_url}}/users"
       }
     },
     {
@@ -58,11 +64,7 @@
           "mode": "formdata",
           "formdata": [
             { "key": "email", "value": "john.doe@example.com", "type": "text" },
-            {
-              "key": "image",
-              "type": "file",
-              "src": "/absolute/path/to/sample.png"
-            }
+            { "key": "image", "type": "file", "src": "/absolute/path/to/sample.png" }
           ]
         }
       }
@@ -71,12 +73,28 @@
       "name": "Delete User",
       "request": {
         "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/user/john.doe@example.com",
-          "host": ["{{base_url}}"],
-          "path": ["user", "john.doe@example.com"]
+        "url": "{{base_url}}/user/john.doe@example.com"
+      }
+    },
+    {
+      "name": "Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/create/job",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"companyName\": \"Google\",\n  \"jobTitle\": \"Software Engineer\",\n  \"description\": \"Build scalable backend systems.\",\n  \"salary\": 150000\n}"
         }
+      }
+    },
+    {
+      "name": "Get All Jobs",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/jobs"
       }
     }
   ],

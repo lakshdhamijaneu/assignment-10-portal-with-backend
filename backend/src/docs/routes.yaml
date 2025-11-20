@@ -1,8 +1,11 @@
 openapi: 3.0.0
 info:
-  title: Assignment 8 — Users API
-  version: 1.0.0
-  description: Secure RESTful APIs for user management, aligned with Assignment 8 and Postman collection.
+  title: Assignment 10 — User & Job Management API
+  version: 2.0.0
+  description: >
+    Secure REST API for user management, authentication, profile image upload,
+    and job management (admin + employee roles).  
+    This version extends Assignment 8 by adding role-based fields and job endpoints.
 
 servers:
   - url: http://localhost:3000
@@ -11,7 +14,7 @@ paths:
   /user:
     post:
       summary: Create User
-      description: Create a new user with validated full name, email, and password.
+      description: Create a new user with full name, email, strong password, and type.
       requestBody:
         required: true
         content:
@@ -22,6 +25,7 @@ paths:
                 - fullName
                 - email
                 - password
+                - type
               properties:
                 fullName:
                   type: string
@@ -32,21 +36,20 @@ paths:
                   example: "john.doe@example.com"
                 password:
                   type: string
-                  format: password
-                  example: "S3cure!Pass1@"
+                  example: "StrongPass123!"
+                type:
+                  type: string
+                  enum: ["admin", "employee"]
+                  example: "employee"
       responses:
         "201":
-          description: User created successfully
+          description: User created successfully.
           content:
             application/json:
               example:
                 message: "User created successfully."
         "400":
-          description: Validation error
-          content:
-            application/json:
-              example:
-                error: "Validation failed."
+          description: Validation error.
 
   /user/login:
     post:
@@ -67,35 +70,27 @@ paths:
                   example: "john.doe@example.com"
                 password:
                   type: string
-                  example: "S3cure!Pass1@"
+                  example: "StrongPass123!"
       responses:
         "200":
-          description: Login successful
+          description: Login successful.
           content:
             application/json:
               example:
                 message: "Login successful."
                 user:
+                  _id: "67b1ef..."
                   fullName: "John Doe"
                   email: "john.doe@example.com"
                   imagePath: "/images/john_doe_example.png"
+                  type: "employee"
         "400":
-          description: Invalid credentials
-          content:
-            application/json:
-              example:
-                error: "Invalid password."
-        "404":
-          description: User not found
-          content:
-            application/json:
-              example:
-                error: "User not found."
+          description: Invalid credentials.
 
   /user/edit:
     put:
       summary: Update User Details
-      description: Edit user full name and/or password using email as identifier.
+      description: Edit full name and/or password using email as identifier.
       requestBody:
         required: true
         content:
@@ -113,46 +108,34 @@ paths:
                   example: "Johnny Doe"
                 password:
                   type: string
-                  example: "N3w!Pass@123"
+                  example: "NewStrongPass@123"
       responses:
         "200":
-          description: User details updated successfully
-          content:
-            application/json:
-              example:
-                message: "User details updated successfully."
-        "400":
-          description: Validation error
-          content:
-            application/json:
-              example:
-                error: "Validation failed."
+          description: User updated successfully.
         "404":
-          description: User not found
-          content:
-            application/json:
-              example:
-                error: "User not found."
+          description: User not found.
 
   /users:
     get:
       summary: Retrieve All Users
-      description: Return all registered users.
+      description: Returns all users except passwords.
       responses:
         "200":
-          description: List of users
+          description: List of users.
           content:
             application/json:
               example:
                 users:
-                  - fullName: "John Doe"
-                    email: "john.doe@example.com"
-                    imagePath: "/images/john_doe_example.png"
+                  - _id: "67b1ef..."
+                    fullName: "Alice Admin"
+                    email: "alice@example.com"
+                    type: "admin"
+                    imagePath: null
 
   /user/uploadImage:
     post:
       summary: Upload User Profile Image
-      description: Upload a JPEG/PNG/GIF image for a user specified by email.
+      description: Upload a JPEG/PNG/GIF image for a user.
       requestBody:
         required: true
         content:
@@ -171,24 +154,16 @@ paths:
                   format: binary
       responses:
         "201":
-          description: Image uploaded successfully
-          content:
-            application/json:
-              example:
-                message: "Image uploaded successfully."
+          description: Image uploaded successfully.
         "400":
-          description: Invalid request
+          description: Invalid request.
         "404":
-          description: User not found
-          content:
-            application/json:
-              example:
-                error: "User not found."
+          description: User not found.
 
   /user/{email}:
     delete:
       summary: Delete User by Email
-      description: Delete a user using their email as the identifier.
+      description: Delete a user using their email.
       parameters:
         - name: email
           in: path
@@ -198,14 +173,57 @@ paths:
             example: "john.doe@example.com"
       responses:
         "200":
-          description: User deleted successfully
-          content:
-            application/json:
-              example:
-                message: "User deleted successfully."
+          description: User deleted successfully.
         "404":
-          description: User not found
+          description: User not found.
+
+  /create/job:
+    post:
+      summary: Create Job Posting (Admin only)
+      description: Admin creates a new job posting.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - companyName
+                - jobTitle
+                - description
+                - salary
+              properties:
+                companyName:
+                  type: string
+                  example: "Google"
+                jobTitle:
+                  type: string
+                  example: "Software Engineer"
+                description:
+                  type: string
+                  example: "Build scalable backend services."
+                salary:
+                  type: number
+                  example: 150000
+      responses:
+        "201":
+          description: Job created successfully.
+        "400":
+          description: Invalid job details.
+
+  /jobs:
+    get:
+      summary: Retrieve All Jobs
+      description: Returns all job postings.
+      responses:
+        "200":
+          description: List of jobs.
           content:
             application/json:
               example:
-                error: "User not found."
+                jobs:
+                  - _id: "87123abc"
+                    companyName: "Google"
+                    jobTitle: "Software Engineer"
+                    description: "Build and maintain backend systems."
+                    salary: 150000
