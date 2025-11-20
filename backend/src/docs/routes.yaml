@@ -134,7 +134,7 @@ paths:
               example:
                 error: "User not found."
 
-  /getUser:
+  /users:
     get:
       summary: Retrieve All Users
       description: Return all registered users.

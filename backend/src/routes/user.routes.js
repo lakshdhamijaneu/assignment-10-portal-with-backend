@@ -7,7 +7,7 @@ const {
   deleteUser,
   uploadImage,
   login,
-} = require("../controllers/user.extra");
+} = require("../controllers/user.controller");
 
 const router = express.Router();
 

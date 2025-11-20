@@ -10,7 +10,7 @@ const userRoutes = require("./routes/user.routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const openapi = require("./docs/openapi");
-const { getAllUsers } = require("./controllers/user.extra");
+const { getAllUsers } = require("./controllers/user.controller");
 
 connectDB();
 
@@ -24,7 +24,7 @@ app.use("/images", express.static(path.join(__dirname, "..", "images")));
 
 // Routes
 app.use("/user", userRoutes);
-app.get("/getUser", getAllUsers);
+app.get("/users", getAllUsers);
 
 const swaggerSpec = swaggerJSDoc(openapi);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
