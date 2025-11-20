@@ -76,7 +76,6 @@ src/
   pages/
     Home.tsx
     Login.tsx
-    JobListings.tsx
     CompanyShowcase.tsx
     CreateJob.tsx
     About.tsx

@@ -1,17 +1,17 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import JobListings from "./pages/JobListings";
 import CompanyShowcase from "./pages/CompanyShowcase";
 import Contact from "./pages/Contact";
+import CreateJob from "./pages/CreateJob";
+import AdminEmployees from "./pages/AdminEmployees";
 
-import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import EmployeeRoute from "./components/EmployeeRoute";
-import CreateJob from "./pages/CreateJob";
 
 function App() {
   return (
@@ -19,41 +19,49 @@ function App() {
       <Navbar />
 
       <Routes>
-        {/* Public */}
+        {/* PUBLIC */}
         <Route path="/login" element={<Login />} />
 
-        {/* Authenticated */}
+        {/* EMPLOYEE-ONLY ROUTES */}
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <EmployeeRoute>
               <Home />
-            </ProtectedRoute>
+            </EmployeeRoute>
           }
         />
 
         <Route
           path="/about"
           element={
-            <ProtectedRoute>
-              <About />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Employee-only */}
-        <Route
-          path="/jobs"
-          element={
             <EmployeeRoute>
-              <JobListings />
+              <About />
             </EmployeeRoute>
           }
         />
 
-        {/* Admin-only */}
         <Route
-          path="/admin/create-job"
+          path="/jobs"
+          element={
+            <EmployeeRoute>
+              <CompanyShowcase />
+            </EmployeeRoute>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <EmployeeRoute>
+              <Contact />
+            </EmployeeRoute>
+          }
+        />
+
+        {/* ADMIN-ONLY ROUTES */}
+        <Route
+          path="/admin/add-job"
           element={
             <AdminRoute>
               <CreateJob />
@@ -61,25 +69,16 @@ function App() {
           }
         />
 
-        {/* Shared */}
         <Route
-          path="/companies"
+          path="/admin/employees"
           element={
-            <ProtectedRoute>
-              <CompanyShowcase />
-            </ProtectedRoute>
+            <AdminRoute>
+              <AdminEmployees />
+            </AdminRoute>
           }
         />
 
-        <Route
-          path="/contact"
-          element={
-            <ProtectedRoute>
-              <Contact />
-            </ProtectedRoute>
-          }
-        />
-
+        {/* ANY UNKNOWN ROUTE */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

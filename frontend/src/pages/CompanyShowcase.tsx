@@ -4,50 +4,56 @@ import {
   Typography,
   Card,
   CardContent,
-  CardMedia,
+  CardActions,
+  Button,
   Grid,
   CircularProgress,
   Alert,
 } from "@mui/material";
 import { axiosClient } from "../api/axiosClient";
-import type { BackendUser, UsersResponse } from "../types";
+
+interface Job {
+  _id: string;
+  companyName: string;
+  jobTitle: string;
+  description: string;
+  salary: number;
+}
 
 const CompanyShowcase = () => {
-  const [users, setUsers] = useState<BackendUser[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const loadUsers = async () => {
+    const loadJobs = async () => {
       try {
-        const { data } = await axiosClient.get<UsersResponse>("/users");
-        setUsers(data.users);
+        const { data } = await axiosClient.get("/jobs");
+        setJobs(data.jobs);
       } catch (err) {
         console.error(err);
-        setError("Failed to load company images");
+        setError("Failed to load job listings");
       } finally {
         setLoading(false);
       }
     };
 
-    loadUsers();
+    loadJobs();
   }, []);
 
-  if (loading) {
+  if (loading)
     return (
       <Container sx={{ mt: 4 }}>
         <CircularProgress />
       </Container>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Container sx={{ mt: 4 }}>
         <Alert severity="error">{error}</Alert>
       </Container>
     );
-  }
 
   return (
     <Container sx={{ mt: 4 }}>
@@ -56,31 +62,29 @@ const CompanyShowcase = () => {
       </Typography>
 
       <Grid container spacing={3}>
-        {users.map((u) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={u._id}>
-            <Card>
-              {u.imagePath ? (
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={`http://localhost:3000${u.imagePath}`}
-                  alt={u.fullName}
-                />
-              ) : (
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image="https://via.placeholder.com/300x200.png?text=No+Image"
-                  alt="No image"
-                />
-              )}
-
-              <CardContent>
-                <Typography variant="h6">{u.fullName}</Typography>
+        {jobs.map((job) => (
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={job._id}>
+            <Card
+              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+            >
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">{job.jobTitle}</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  {job.companyName}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {u.email}
+                  {job.description}
+                </Typography>
+                <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                  Salary: ${job.salary}
                 </Typography>
               </CardContent>
+
+              <CardActions>
+                <Button size="small" variant="contained" fullWidth>
+                  Apply
+                </Button>
+              </CardActions>
             </Card>
           </Grid>
         ))}

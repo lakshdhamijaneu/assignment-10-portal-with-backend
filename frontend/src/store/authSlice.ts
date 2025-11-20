@@ -10,12 +10,12 @@ export interface AuthUser {
 
 interface AuthState {
   user: AuthUser | null;
-  role: "admin" | "employee" | null;
+  loading: boolean; // <-- ADD THIS
 }
 
 const initialState: AuthState = {
   user: null,
-  role: null,
+  loading: true, // <-- initially loading
 };
 
 const authSlice = createSlice({
@@ -24,21 +24,19 @@ const authSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<AuthUser>) {
       state.user = action.payload;
-      state.role = action.payload.type;
-      localStorage.setItem("user", JSON.stringify(action.payload));
+      state.loading = false; // login finished
     },
     logout(state) {
       state.user = null;
-      state.role = null;
       localStorage.removeItem("user");
+      state.loading = false;
     },
     loadUserFromStorage(state) {
       const saved = localStorage.getItem("user");
       if (saved) {
-        const parsed = JSON.parse(saved) as AuthUser;
-        state.user = parsed;
-        state.role = parsed.type;
+        state.user = JSON.parse(saved);
       }
+      state.loading = false;
     },
   },
 });

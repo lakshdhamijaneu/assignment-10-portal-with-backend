@@ -44,7 +44,7 @@ const Login = () => {
 
       // Redirect based on role
       if (data.user.type === "admin") {
-        navigate("/admin/create-job");
+        navigate("/admin/add-job");
       } else {
         navigate("/jobs");
       }

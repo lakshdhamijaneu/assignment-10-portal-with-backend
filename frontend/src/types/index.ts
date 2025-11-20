@@ -15,6 +15,7 @@ export interface BackendUser {
   fullName: string;
   email: string;
   imagePath?: string;
+  type: string;
 }
 
 export interface UsersResponse {

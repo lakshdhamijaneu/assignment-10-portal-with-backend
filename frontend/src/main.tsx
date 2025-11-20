@@ -5,6 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { loadUserFromStorage } from "./store/authSlice";
+
+store.dispatch(loadUserFromStorage());
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
