@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Paper,
@@ -9,12 +9,16 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { AuthContext } from "../context/AuthContext";
+
 import { useNavigate } from "react-router-dom";
+import { axiosClient } from "../api/axiosClient";
+
+import { useAppDispatch } from "../store/hooks";
+import { setUser } from "../store/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,9 +31,24 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(email, password);
-      navigate("/");
-    } catch (err: any) {
+      const { data } = await axiosClient.post("/user/login", {
+        email,
+        password,
+      });
+
+      // Save to Redux
+      dispatch(setUser(data.user));
+
+      // Persist in localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirect based on role
+      if (data.user.type === "admin") {
+        navigate("/admin/create-job");
+      } else {
+        navigate("/jobs");
+      }
+    } catch (err) {
       console.error(err);
       setError("Invalid email or password");
     } finally {

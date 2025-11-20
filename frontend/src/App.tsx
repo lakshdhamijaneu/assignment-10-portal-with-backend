@@ -1,21 +1,28 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
+
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import JobListings from "./pages/JobListings";
 import CompanyShowcase from "./pages/CompanyShowcase";
 import Contact from "./pages/Contact";
-import { AuthProvider } from "./context/AuthContext";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+import EmployeeRoute from "./components/EmployeeRoute";
+import CreateJob from "./pages/CreateJob";
 
 function App() {
   return (
-    <AuthProvider>
+    <>
       <Navbar />
+
       <Routes>
+        {/* Public */}
         <Route path="/login" element={<Login />} />
 
+        {/* Authenticated */}
         <Route
           path="/"
           element={
@@ -34,15 +41,27 @@ function App() {
           }
         />
 
+        {/* Employee-only */}
         <Route
           path="/jobs"
           element={
-            <ProtectedRoute>
+            <EmployeeRoute>
               <JobListings />
-            </ProtectedRoute>
+            </EmployeeRoute>
           }
         />
 
+        {/* Admin-only */}
+        <Route
+          path="/admin/create-job"
+          element={
+            <AdminRoute>
+              <CreateJob />
+            </AdminRoute>
+          }
+        />
+
+        {/* Shared */}
         <Route
           path="/companies"
           element={
@@ -63,7 +82,7 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </AuthProvider>
+    </>
   );
 }
 

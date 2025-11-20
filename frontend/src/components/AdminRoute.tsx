@@ -6,14 +6,16 @@ interface Props {
   children: JSX.Element;
 }
 
-const ProtectedRoute = ({ children }: Props) => {
+const AdminRoute = ({ children }: Props) => {
   const user = useAppSelector((state) => state.auth.user);
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (user.type !== "admin") {
+    return <Navigate to="/jobs" replace />;
   }
 
   return children;
 };
 
-export default ProtectedRoute;
+export default AdminRoute;
