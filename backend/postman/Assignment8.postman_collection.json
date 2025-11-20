@@ -1,0 +1,89 @@
+{
+  "info": {
+    "name": "Assignment 8 - Users API (Final)",
+    "_postman_id": "c91f6f6e-7ef1-4b18-93b1-88a6766e65da",
+    "description": "Aligned with SwaggerHub spec — Assignment 8 Secure RESTful APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/user",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"S3cure!Pass1@\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/user/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"S3cure!Pass1@\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Edit User",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/user/edit",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"fullName\": \"Johnny Doe\",\n  \"password\": \"N3w!Pass@123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/getUser"
+      }
+    },
+    {
+      "name": "Upload Image",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/user/uploadImage",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "email", "value": "john.doe@example.com", "type": "text" },
+            {
+              "key": "image",
+              "type": "file",
+              "src": "/absolute/path/to/sample.png"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/user/john.doe@example.com",
+          "host": ["{{base_url}}"],
+          "path": ["user", "john.doe@example.com"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ]
+}
