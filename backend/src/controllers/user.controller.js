@@ -8,8 +8,14 @@ const {
 
 const createUser = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, type } = req.body;
 
+    // Validate presence of required fields
+    if (!fullName || !email || !password || !type) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
+
+    // Validate format of email/fullName/password
     if (
       !validateEmail(email) ||
       !validateFullName(fullName) ||
@@ -18,14 +24,22 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: "Validation failed." });
     }
 
-    const exists = await User.findOne({ email });
-    if (exists) {
-      // Do not leak info; but creation conflict is 400 per assignment examples
-      return res.status(400).json({ error: "Validation failed." });
+    // Validate type must be admin or employee
+    if (!["admin", "employee"].includes(type)) {
+      return res.status(400).json({ error: "Invalid user type." });
     }
 
+    // Check if email already exists
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(400).json({ error: "Validation failed. User already exists" });
+    }
+
+    // Hash password
     const hash = await bcrypt.hash(password, 10);
-    await User.create({ fullName, email, password: hash });
+
+    // Create user with type
+    await User.create({ fullName, email, password: hash, type });
 
     return res.status(201).json({ message: "User created successfully." });
   } catch (err) {
